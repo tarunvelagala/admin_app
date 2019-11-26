@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "933115421302",
-    "firebase_url": "https://sist-student.firebaseio.com",
-    "project_id": "sist-student",
-    "storage_bucket": "sist-student.appspot.com"
+    "project_number": "376692160242",
+    "firebase_url": "https://attendance-app-14b15.firebaseio.com",
+    "project_id": "attendance-app-14b15",
+    "storage_bucket": "attendance-app-14b15.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:933115421302:android:c86483d95720786ca1b557",
+        "mobilesdk_app_id": "1:376692160242:android:6b8c06708e3f285837026b",
         "android_client_info": {
           "package_name": "com.sathyabamaofficial.admin_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "933115421302-7sqjuapf8eilj2ivh2imeo58tudp2eve.apps.googleusercontent.com",
+          "client_id": "376692160242-0fpjopuvn33sffu88miej6ubb8c2gu3c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sathyabamaofficial.admin_app",
@@ -23,57 +23,20 @@
           }
         },
         {
-          "client_id": "933115421302-s35iqotk4mtjl9sq58p5o7166rakqn2u.apps.googleusercontent.com",
+          "client_id": "376692160242-a3p92gonrsf8ec8e90lohdpb4c3a29ng.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCwjVUxl2bmdhMt9_BVmvXD2b89YzKsB9o"
+          "current_key": "AIzaSyC65nk0cruDg4U-zRSCuj9UynWlni0oXYs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "933115421302-s35iqotk4mtjl9sq58p5o7166rakqn2u.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:933115421302:android:cc169fef29a10d8ea1b557",
-        "android_client_info": {
-          "package_name": "com.sathyabamaofficial.student_app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "933115421302-m2m9qkvt0at1to56vr23sq0m6p5akgse.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sathyabamaofficial.student_app",
-            "certificate_hash": "a8a8f0e94c5863765a8312011e0a95ce931f3cd9"
-          }
-        },
-        {
-          "client_id": "933115421302-s35iqotk4mtjl9sq58p5o7166rakqn2u.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCwjVUxl2bmdhMt9_BVmvXD2b89YzKsB9o"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "933115421302-s35iqotk4mtjl9sq58p5o7166rakqn2u.apps.googleusercontent.com",
+              "client_id": "376692160242-a3p92gonrsf8ec8e90lohdpb4c3a29ng.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
