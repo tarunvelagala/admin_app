@@ -1,12 +1,15 @@
+import 'package:admin_app/screens/batch_details.dart';
 import 'package:admin_app/screens/faqs.dart';
 import 'package:admin_app/utils/constants.dart';
 import 'package:admin_app/utils/crud_utils.dart';
+import 'package:admin_app/utils/otp_utils.dart';
 import 'package:admin_app/utils/request_permssions.dart';
 import 'package:admin_app/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:countdown/countdown.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -28,12 +31,11 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> {
   CrudUtils crudUtils = CrudUtils();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+  String otp;
+  OtpUtil otpUtil = OtpUtil();
+  CountDown cd;
+  var sub;
+  String time = "1";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,6 +55,13 @@ class _WelcomeState extends State<Welcome> {
               child: Text("Register Students"),
               onPressed: () {
                 checkForCameraPermissions();
+              },
+            ),
+            RaisedButton(
+              child: Text("Take Attendance"),
+              onPressed: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (BuildContext context) => BatchDetailsScreen()));
               },
             )
           ],
@@ -90,7 +99,19 @@ class _WelcomeState extends State<Welcome> {
       if (await crudUtils.verifyOnlyRegInDB(resList[0]) ||
           await crudUtils.verifyOnlyDevIdInDB(resList[5])) {
         scaffold.showSnackBar(SnackBar(
-          content: Text("Edava sekalu Edava sekalu"),
+          content: Text(
+            "Student already added.",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ));
+      } else {
+        crudUtils.addStudentDetails(res);
+        scaffold.showSnackBar(SnackBar(
+          content: Text(
+            "Student Added Successfully",
+          ),
+          backgroundColor: Colors.green,
         ));
       }
     }
@@ -165,6 +186,7 @@ class _WelcomeState extends State<Welcome> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {},
+              onVerticalDragStart: (_) {},
               child: Container(
                 height: 300,
                 child: Center(

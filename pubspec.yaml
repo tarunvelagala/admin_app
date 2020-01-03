@@ -25,12 +25,17 @@ dependencies:
   cupertino_icons: ^0.1.2
   flutter_launcher_icons:
   device_id:
+  geoflutterfire: 
   shared_preferences: 
   permission_handler: 
   qrscan: 
   cloud_firestore:
-  geolocator: 
   location:  
+  geolocator: 
+  latlong: 
+  countdown: 
+  firestore_helpers: ^3.2.1+1 
+  
 
 dev_dependencies:
   flutter_test:

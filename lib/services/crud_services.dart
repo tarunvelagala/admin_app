@@ -9,7 +9,7 @@ class CrudMethods {
   }
 
   updateLocationOfAdmin(selectedDoc, newValue) async {
-    Firestore.instance
+    await Firestore.instance
         .collection('admins')
         .document(selectedDoc)
         .updateData(newValue)
@@ -43,6 +43,7 @@ class CrudMethods {
         .where('device_id', isEqualTo: devId)
         .getDocuments();
   }
+
   getStudentRegNumber(String regNo) {
     return Firestore.instance
         .collection("students")
@@ -55,5 +56,48 @@ class CrudMethods {
         .collection("students")
         .where("device_id", isEqualTo: devId)
         .getDocuments();
+  }
+
+  updateOtp(selectedDoc, newValue) async {
+    await Firestore.instance
+        .collection('admins')
+        .document(selectedDoc)
+        .updateData(newValue)
+        .catchError((e) => print(e));
+  }
+
+  makeOtpZero(selectedDoc, newValue) async {
+    await Firestore.instance
+        .collection('admins')
+        .document(selectedDoc)
+        .updateData(newValue)
+        .catchError((e) => print(e));
+  }
+
+  updateBatchDetails(selectedDoc, newValue) async {
+    await Firestore.instance
+        .collection('admins')
+        .document(selectedDoc)
+        .updateData(newValue)
+        .catchError((e) => print(e));
+  }
+
+  getStudentAttendanceVerified(
+      String section, String batch, String department) async {
+    QuerySnapshot qn = await Firestore.instance
+        .collection("students")
+        .where("section", isEqualTo: section)
+        .where("batch", isEqualTo: batch)
+        .where("dept", isEqualTo: department)
+        .where("is_verified", isEqualTo: "0")
+        .getDocuments();
+    return qn.documents;
+  }
+
+  updateAttendanceArray(selectedDoc, newValue) async {
+    await Firestore.instance
+        .collection("students")
+        .document(selectedDoc)
+        .updateData(newValue);
   }
 }
