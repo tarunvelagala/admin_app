@@ -1,5 +1,6 @@
 import 'package:admin_app/screens/absentees_screen.dart';
 import 'package:admin_app/screens/faqs.dart';
+import 'package:admin_app/services/location_service.dart';
 import 'package:admin_app/utils/constants.dart';
 import 'package:admin_app/utils/crud_utils.dart';
 import 'package:admin_app/utils/otp_utils.dart';
@@ -222,11 +223,12 @@ class _BatchDetailsState extends State<BatchDetails> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               GestureDetector(
-                onTap: () {
-                  //String devID = await DeviceId.getID;
+                onTap: () async {
+                  String devID = await DeviceId.getID;
                   //s.saveAttnIdAndDevID(_attnID, devID);
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
+                    attnId = await SharedPrefs().getAttnId(devID);
                     crudUtils.storeBatchDetailsInDb(
                         attnId,
                         currentSelectedYear,
@@ -234,7 +236,7 @@ class _BatchDetailsState extends State<BatchDetails> {
                         currentSelectedDepartment,
                         radius);
                     // TODO:  Change timer value
-                    cd = CountDown(Duration(seconds: 5));
+                    cd = CountDown(Duration(minutes: 1));
                     sub = cd.stream.listen(null);
                     otp = otpUtil.getRandomOtp();
                     print(otp);
@@ -330,8 +332,8 @@ class _BatchDetailsState extends State<BatchDetails> {
 
   startTimer(String radius) async {
     String deviceId = await DeviceId.getID;
-    // var location = await getLocation();
-    // calculateRadius(location, radius);
+    var location = await getLocation();
+    calculateRadius(location, radius);
     attnId = await SharedPrefs().getAttnId(deviceId);
     timeStarted = true;
     crudUtils.storeOtpInDb(otp, attnId, timeStarted);

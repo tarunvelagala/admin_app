@@ -24,7 +24,7 @@ calculateRadius(Position location, String radius) async {
   Firestore _firestore = Firestore.instance;
   GeoFirePoint center =
       geo.point(latitude: location.latitude, longitude: location.longitude);
-  var collectionReference = _firestore.collection('admins');
+  var collectionReference = _firestore.collection('students');
   var geoRef = geo.collection(collectionRef: collectionReference);
   var stream = geoRef.within(
       center: center,

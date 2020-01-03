@@ -88,7 +88,7 @@ class _RegisterState extends State<Register> {
                             else
                               return null;
                           },
-                          onSaved: (value) {
+                          onSaved: (String value) {
                             attnID = value;
                           },
                           decoration: InputDecoration(
