@@ -120,10 +120,12 @@ class CrudUtils {
   }
 
   updateAttendanceInDb(DocumentSnapshot docs, bool status) {
+    var date = DateTime.now();
     crudObj.updateAttendanceArray(docs.documentID, {
+      "is_verified": status ? "1" : "0",
       "attendance": FieldValue.arrayUnion([
         {
-          DateTime.now().toString(): status ? "1" : "0",
+          "${date.year}-${date.month}-${date.day}": status ? "1" : "0",
         }
       ])
     });

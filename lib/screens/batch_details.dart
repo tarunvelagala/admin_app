@@ -236,7 +236,7 @@ class _BatchDetailsState extends State<BatchDetails> {
                         currentSelectedDepartment,
                         radius);
                     // TODO:  Change timer value
-                    cd = CountDown(Duration(minutes: 1));
+                    cd = CountDown(Duration(seconds: 5));
                     sub = cd.stream.listen(null);
                     otp = otpUtil.getRandomOtp();
                     print(otp);

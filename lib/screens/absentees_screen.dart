@@ -45,18 +45,45 @@ class Absentee extends StatefulWidget {
 }
 
 class _AbsenteeState extends State<Absentee> {
-  bool selected = false;
-  bool isMultipleSelection = false;
-  var userStatus;
   var l;
+  // List<String> _absenteeList = List();
+  bool isMultipleSelection = false;
+  bool isSelectButtonSelected = false, isAllSelected = false;
+  List<int> _selectedIndexList = List();
+  bool _selectionMode = false;
   Future<List> getAbsenteeList() async {
     l = await CrudMethods().getStudentAttendanceVerified(
         // Student Absentee list firestore => get
         widget.section,
         widget.batch,
         widget.department);
-    userStatus = List<bool>.filled(l.length, false);
+    /*l.forEach((f) {
+      _absenteeList.add(f["reg_no"]);
+    });*/
     return l;
+  }
+
+  void _changeSelection({bool enable, int index}) {
+    _selectionMode = enable;
+    _selectedIndexList.add(index);
+    if (index == -1) {
+      _selectedIndexList.clear();
+    }
+  }
+
+  checkIfAllSelected(x) {
+    if (_selectedIndexList.length == x.length) {
+      return true;
+    }
+    return false;
+  }
+
+  addListIndex() {
+    for (int i = 0; i < l.length; i++) {
+      if (!_selectedIndexList.contains(i)) {
+        _selectedIndexList.add(i);
+      }
+    }
   }
 
   @override
@@ -66,22 +93,52 @@ class _AbsenteeState extends State<Absentee> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Material(
-              elevation: 1,
-              child: ListTile(
-                title: Text(
-                  "Select all".toUpperCase(),
-                  style: TextStyle(fontWeight: FontWeight.w400),
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.select_all,
-                    color: baseColor,
+            _selectionMode
+                ? Material(
+                    elevation: 1,
+                    child: ListTile(
+                        onTap: () {
+                          setState(() {
+                            isSelectButtonSelected = !isSelectButtonSelected;
+                          });
+                          if (isSelectButtonSelected) {
+                            addListIndex();
+                          } else {
+                            if (checkIfAllSelected(l)) {
+                              _selectedIndexList.clear();
+                            } else {
+                              addListIndex();
+                              isSelectButtonSelected = !isSelectButtonSelected;
+                            }
+                          }
+                        },
+                        title: Text(
+                          "Select all".toUpperCase(),
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                        leading: Icon(
+                          Icons.info_outline,
+                          color: baseColor,
+                        ),
+                        trailing: Icon(
+                          isSelectButtonSelected && checkIfAllSelected(l)
+                              ? Icons.check_circle
+                              : Icons.radio_button_unchecked,
+                          color: isSelectButtonSelected && checkIfAllSelected(l)
+                              ? baseColor
+                              : null,
+                        )),
+                  )
+                : Material(
+                    elevation: 1,
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.info_outline,
+                        color: baseColor,
+                      ),
+                      title: Text("Long press for multiple selection"),
+                    ),
                   ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
             Expanded(
               child: absenteeList(),
             ),
@@ -93,7 +150,8 @@ class _AbsenteeState extends State<Absentee> {
                     // print(_AbsenteeListState().getPresentStudents());
                     for (int i = 0; i < l.length; i++) {
                       // TODO: update true -> variable
-                      CrudUtils().updateAttendanceInDb(l[i], true);
+                      CrudUtils().updateAttendanceInDb(
+                          l[i], _selectedIndexList.contains(i));
                     }
                     // TODO : Show Alert Dialog of attendance taken.
                     Navigator.of(context).pushAndRemoveUntil(
@@ -121,7 +179,7 @@ class _AbsenteeState extends State<Absentee> {
     );
   }
 
-  Widget absenteeList() {
+  FutureBuilder absenteeList() {
     return FutureBuilder(
       future: getAbsenteeList(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -129,23 +187,66 @@ class _AbsenteeState extends State<Absentee> {
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: baseColor,
-                  child: Text(
-                    getInitials(snapshot.data[index]["student_name"]),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                title: Text(snapshot.data[index]["student_name"]),
-                subtitle: Text(snapshot.data[index]["reg_no"]),
-                trailing: Checkbox(
-                  value: userStatus[index],
-                  onChanged: (bool value) {
-                    //onCategorySelected(value);
+              if (_selectionMode) {
+                return ListTile(
+                  onLongPress: () {
+                    setState(() {
+                      _changeSelection(enable: false, index: -1);
+                    });
                   },
-                ),
-              );
+                  onTap: () {
+                    setState(() {
+                      if (_selectedIndexList.contains(index)) {
+                        _selectedIndexList.remove(index);
+                      } else {
+                        _selectedIndexList.add(index);
+                      }
+                      if (_selectedIndexList.isEmpty) {
+                        _changeSelection(enable: false, index: -1);
+                      }
+                      if (_selectedIndexList.length == snapshot.data.length) {
+                        isAllSelected = !isAllSelected;
+                      }
+                      if (!checkIfAllSelected(snapshot.data)) {
+                        isSelectButtonSelected = true;
+                      }
+                    });
+                    print(_selectedIndexList);
+                  },
+                  leading: CircleAvatar(
+                    backgroundColor: baseColor,
+                    child: Text(
+                      getInitials(snapshot.data[index]["student_name"]),
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  title: Text(snapshot.data[index]["student_name"]),
+                  subtitle: Text(snapshot.data[index]["reg_no"]),
+                  trailing: Icon(
+                    _selectedIndexList.contains(index)
+                        ? Icons.check_circle
+                        : Icons.radio_button_unchecked,
+                    color:
+                        _selectedIndexList.contains(index) ? baseColor : null,
+                  ),
+                );
+              } else {
+                return ListTile(
+                  leading: CircleAvatar(
+                    child:
+                        Text(getInitials(snapshot.data[index]["student_name"])),
+                  ),
+                  subtitle: Text(snapshot.data[index]["reg_no"]),
+                  title: Text(snapshot.data[index]["student_name"]
+                      .toString()
+                      .toUpperCase()),
+                  onLongPress: () {
+                    setState(() {
+                      _changeSelection(enable: true, index: index);
+                    });
+                  },
+                );
+              }
             },
           );
         } else {
